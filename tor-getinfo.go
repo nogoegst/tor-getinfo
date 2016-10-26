@@ -12,12 +12,12 @@ import (
 	"fmt"
 	"log"
 	"strings"
-	"github.com/yawning/bulb"
+	"github.com/nogoegst/bulb"
 )
 
 func main() {
 	var debug_flag = flag.Bool("debug", false, "Show what's happening")
-	var control = flag.String("control-port", "9051", "Set Tor ControlPort to be used")
+	var control = flag.String("control-addr", "default://", "Set tor control address to be used")
 	flag.Parse()
 	debug := *debug_flag
 	var tail = flag.Args()
@@ -27,8 +27,7 @@ func main() {
 	var keyword = tail[0]
 
 	// Connect to a running tor instance.
-	c, err := bulb.Dial("tcp4", "127.0.0.1:"+*control)
-	//c, err := bulb.Dial("unix", "/var/run/tor/control")
+	c, err := bulb.DialURL(*control)
 	if err != nil {
 		log.Fatalf("Failed to connect to control socket: %v", err)
 	}
